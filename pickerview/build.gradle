@@ -5,10 +5,10 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
     }
     buildTypes {
         release {
@@ -24,3 +24,30 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
 }
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'Pickerview'
+
+    publishedGroupId = 'com.emreeran.pickerview'
+    libraryName = 'PickerView'
+    artifact = 'pickerview'
+
+    libraryDescription = 'Android PickerView'
+
+    siteUrl = 'https://github.com/emreeran/PickerView'
+    gitUrl = 'https://github.com/emreeran/PickerView.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'emreeran'
+    developerName = 'Emre Eran'
+    developerEmail = 'emre.eran@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

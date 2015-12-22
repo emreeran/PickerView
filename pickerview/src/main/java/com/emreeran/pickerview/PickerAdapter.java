@@ -1,4 +1,4 @@
-package com.emreeran.ehorizontalpicker;
+package com.emreeran.pickerview;
 
 import android.view.View;
 import android.view.ViewGroup;

@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.emreeran.ehorizontalpicker.PickerView;
+import com.emreeran.pickerview.PickerView;
 
 /**
  * Fragment class demonstrating vertical PickerView
