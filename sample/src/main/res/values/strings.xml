@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ViewPicker</string>
+    <string name="btn_horizontal">Horizontal</string>
+    <string name="btn_vertical">Vertical</string>
+</resources>

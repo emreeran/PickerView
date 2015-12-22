@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PickerView">
+        <attr name="item_per_screen" format="integer"/>
+        <attr name="divider_width" format="dimension"/>
+        <attr name="divider_height" format="dimension"/>
+        <attr name="divider_color" format="color"/>
+        <attr name="orientation" format="enum">
+            <enum name="horizontal" value="0"/>
+            <enum name="vertical" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>
