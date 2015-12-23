@@ -64,6 +64,9 @@ public class HorizontalFragment extends Fragment {
     }
 
     class PickerAdapter extends PickerView.Adapter {
+
+        private View mPreviousClicked;
+
         @Override
         public View onCreateView(ViewGroup parent) {
             return LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_horizontal_picker_item, parent, false);
@@ -84,6 +87,11 @@ public class HorizontalFragment extends Fragment {
         @Override
         public void onViewClicked(View view, int position) {
             mViewPager.setCurrentItem(position, true);
+            if (mPreviousClicked!= null) {
+                mPreviousClicked.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
+            }
+            view.setBackgroundColor(getResources().getColor(android.R.color.black));
+            mPreviousClicked = view;
         }
     }
 }
