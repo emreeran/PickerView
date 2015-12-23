@@ -56,7 +56,7 @@ Then assign by ```pickerView.setIndicator(indicator);``` or if you want a bounce
 
 Extend ```PickerView.Adapter``` to create your adapter class. 
 
-Set your item layouts in ```onCreateView``` and manipulate then in ```onBindView``` functions.
+Set your item layouts in ```onCreateView``` and manipulate them in ```onBindView``` functions.
 
 Use ```onViewClicked``` function to implement on click events.
 
