@@ -20,6 +20,8 @@ public class HorizontalFragment extends Fragment {
 
     ViewPager mViewPager;
 
+    private View mPreviousClicked;
+
     public static HorizontalFragment newInstance(Context context) {
         return (HorizontalFragment) instantiate(context, HorizontalFragment.class.getName());
     }
@@ -53,7 +55,16 @@ public class HorizontalFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                pickerView.scrollToPosition(position);
+                pickerView.scrollToPosition(position, new PickerView.OnScrolledToViewListener() {
+                    @Override
+                    public void onScrolled(View view) {
+                        if (mPreviousClicked!= null) {
+                            mPreviousClicked.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
+                        }
+                        view.setBackgroundColor(getResources().getColor(android.R.color.black));
+                        mPreviousClicked = view;
+                    }
+                });
             }
 
             @Override
@@ -64,8 +75,6 @@ public class HorizontalFragment extends Fragment {
     }
 
     class PickerAdapter extends PickerView.Adapter {
-
-        private View mPreviousClicked;
 
         @Override
         public View onCreateView(ViewGroup parent) {

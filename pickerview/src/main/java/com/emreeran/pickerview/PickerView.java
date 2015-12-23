@@ -3,6 +3,7 @@ package com.emreeran.pickerview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -15,11 +16,10 @@ import android.widget.RelativeLayout;
  * Horizontal or vertical scrollable view extended from RecyclerView with equal size items,
  * Item heights or widths are calculated according to mItemsPerScreen
  * value for horizontal and vertical orientation respectively
- * An indicator view can be assigned to move along with selected items.
- * <p/>
+ * An indicator view can be assigned to move along with selected items
  * Needs an adapter to be assigned to get view items. Extend your adapter with PickerView.Adapter class.
  * Implement onCreateView to inflate items, onBindView to manipulate views and on onViewClicked to manage onClick events.
- * <p/>
+ *
  * Created by Emre Eran on 21/12/15.
  */
 public class PickerView extends RecyclerView {
@@ -30,8 +30,6 @@ public class PickerView extends RecyclerView {
     private int mOrientation;
     private int mParentWidth, mParentHeight;
     private int mItemsPerScreen;
-//    private int mItemWidth, mItemHeight;
-
 
     private int mItemSize;
     private int mDividerSize;
@@ -142,11 +140,18 @@ public class PickerView extends RecyclerView {
     }
 
     public void scrollToPosition(int position) {
+        scrollToPosition(position, null);
+    }
+
+    public void scrollToPosition(int position, @Nullable OnScrolledToViewListener listener) {
         if (mCurrentPosition != position) {
             Adapter.SimpleHolder holder = (Adapter.SimpleHolder) findViewHolderForAdapterPosition(position);
             if (holder != null) {
                 scrollToView(holder.mRootView, position);
                 scrollIndicatorToPosition(position);
+                if (listener != null) {
+                    listener.onScrolled(holder.mRootView);
+                }
             }
         }
     }
@@ -239,6 +244,7 @@ public class PickerView extends RecyclerView {
                 mIndicator.setLayoutParams(params);
 
             }
+            requestLayout();
         }
     }
 
@@ -306,5 +312,9 @@ public class PickerView extends RecyclerView {
                 mRootView = itemView;
             }
         }
+    }
+
+    public interface OnScrolledToViewListener {
+        void onScrolled(View view);
     }
 }
