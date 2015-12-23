@@ -1,11 +1,8 @@
-package com.example.ehorizontalpicker;
+package com.example.pickerview;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
 
@@ -13,12 +10,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame, HorizontalFragment.newInstance(this)).commit();
-
-        Button horizontalButton = (Button) findViewById(R.id.button_horizontal);
-        Button verticalButton = (Button) findViewById(R.id.button_vertical);
-        horizontalButton.setOnClickListener(this);
-        verticalButton.setOnClickListener(this);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame, SimpleFragment.newInstance(this)).commit();
     }
 
     @Override
@@ -29,6 +21,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case R.id.button_vertical:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame, VerticalFragment.newInstance(this)).commit();
+                break;
+            case R.id.button_simple:
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame, SimpleFragment.newInstance(this)).commit();
                 break;
         }
     }

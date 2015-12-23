@@ -1,4 +1,4 @@
-package com.example.ehorizontalpicker;
+package com.example.pickerview;
 
 import android.content.Context;
 import android.os.Bundle;

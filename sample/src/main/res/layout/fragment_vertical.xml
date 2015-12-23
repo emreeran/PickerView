@@ -10,7 +10,7 @@
         android:layout_width="50dp"
         android:layout_height="match_parent"
         app:divider_color="#55000000"
-        app:divider_height="2dp"
+        app:divider_size="2dp"
         app:item_per_screen="3"
         app:orientation="vertical"/>
 

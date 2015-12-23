@@ -1,4 +1,4 @@
-package com.example.ehorizontalpicker;
+package com.example.pickerview;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,28 +13,27 @@ import android.widget.TextView;
 import com.emreeran.pickerview.PickerView;
 
 /**
- * Fragment class demonstrating horizontal PickerView
+ * Fragment class demonstrating vertical PickerView
  * Created by Emre Eran on 22/12/15.
  */
-public class HorizontalFragment extends Fragment {
+public class VerticalFragment extends Fragment {
 
     ViewPager mViewPager;
 
-    public static HorizontalFragment newInstance(Context context) {
-        return (HorizontalFragment) instantiate(context, HorizontalFragment.class.getName());
+    public static VerticalFragment newInstance(Context context) {
+        return (VerticalFragment)instantiate(context, VerticalFragment.class.getName());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_horizontal, container, false);
+        return inflater.inflate(R.layout.fragment_vertical, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        final PickerView pickerView = (PickerView) view.findViewById(R.id.horizontal_picker);
+        final PickerView pickerView = (PickerView) view.findViewById(R.id.vertical_picker);
         PickerAdapter pickerAdapter = new PickerAdapter();
         pickerView.setAdapter(pickerAdapter);
 
@@ -66,7 +65,7 @@ public class HorizontalFragment extends Fragment {
     class PickerAdapter extends PickerView.Adapter {
         @Override
         public View onCreateView(ViewGroup parent) {
-            return LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_horizontal_picker_item, parent, false);
+            return LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_vertical_picker_item, parent, false);
         }
 
         @Override

@@ -13,22 +13,39 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button_horizontal"
+            android:id="@+id/button_simple"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="125dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:background="@android:color/darker_gray"
+            android:onClick="onClick"
+            android:padding="5dp"
+            android:text="@string/btn_simple"
+            android:textColor="@android:color/black"/>
+
+        <Button
+            android:id="@+id/button_horizontal"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/darker_gray"
+            android:onClick="onClick"
+            android:padding="5dp"
             android:text="@string/btn_horizontal"
             android:textColor="@android:color/black"/>
 
         <Button
             android:id="@+id/button_vertical"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="125dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:background="@android:color/darker_gray"
+            android:onClick="onClick"
+            android:padding="5dp"
             android:text="@string/btn_vertical"
             android:textColor="@android:color/black"/>
     </LinearLayout>
