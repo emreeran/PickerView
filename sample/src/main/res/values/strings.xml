@@ -3,4 +3,5 @@
     <string name="btn_simple">Simple</string>
     <string name="btn_horizontal">Horizontal</string>
     <string name="btn_vertical">Vertical</string>
+    <string name="btn_variable">Variable</string>
 </resources>

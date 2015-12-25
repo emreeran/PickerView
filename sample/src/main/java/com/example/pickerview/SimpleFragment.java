@@ -82,7 +82,12 @@ public class SimpleFragment extends Fragment {
         }
 
         @Override
-        public void onViewClicked(View view, int position) {
+        public void onSelectView(View view, int position) {
+
+        }
+
+        @Override
+        public void onSelectPosition(int position) {
             mViewPager.setCurrentItem(position, true);
         }
     }

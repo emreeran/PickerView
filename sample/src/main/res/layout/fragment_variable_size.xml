@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.emreeran.pickerview.PickerView
+        android:id="@+id/horizontal_picker"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:divider_size="2dp"
+        app:divider_color="#55000000"
+        app:orientation="horizontal"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/horizontal_picker"/>
+
+    <View
+        android:id="@+id/indicator"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/horizontal_picker"
+        android:background="@drawable/triangle"
+        android:rotation="180"/>
+</RelativeLayout>

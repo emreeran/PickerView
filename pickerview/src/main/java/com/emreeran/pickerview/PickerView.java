@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -18,8 +19,8 @@ import android.widget.RelativeLayout;
  * value for horizontal and vertical orientation respectively
  * An indicator view can be assigned to move along with selected items
  * Needs an adapter to be assigned to get view items. Extend your adapter with PickerView.Adapter class.
- * Implement onCreateView to inflate items, onBindView to manipulate views and on onViewClicked to manage onClick events.
- *
+ * Implement onCreateView to inflate items, onBindView to manipulate views and on onSelectPosition to manage onClick events.
+ * <p/>
  * Created by Emre Eran on 21/12/15.
  */
 public class PickerView extends RecyclerView {
@@ -36,7 +37,7 @@ public class PickerView extends RecyclerView {
 
     private View mIndicator;
     private int mCurrentPosition = 0;
-    private int mLastIndicatorPosition;
+    private int mIndicatorOffset;
     private boolean mIndicatorBounceToggle;
     private boolean mScrollOnClick = true;
 
@@ -146,12 +147,15 @@ public class PickerView extends RecyclerView {
     public void scrollToPosition(int position, @Nullable OnScrolledToViewListener listener) {
         if (mCurrentPosition != position) {
             Adapter.SimpleHolder holder = (Adapter.SimpleHolder) findViewHolderForAdapterPosition(position);
+            // TODO problem here
             if (holder != null) {
-                scrollToView(holder.mRootView, position);
+                scrollToView(holder.mRootView);
                 scrollIndicatorToPosition(position);
+                mCurrentPosition = position;
                 if (listener != null) {
                     listener.onScrolled(holder.mRootView);
                 }
+                ((Adapter)getAdapter()).setLastItem(holder.mRootView);
             }
         }
     }
@@ -162,8 +166,8 @@ public class PickerView extends RecyclerView {
 
     public void setIndicator(View view, boolean bounceAnimation) {
         mIndicator = view;
-        mLastIndicatorPosition = 0;
         mIndicatorBounceToggle = bounceAnimation;
+        mIndicatorOffset = 0;
 
         if (mOrientation == HORIZONTAL) {
             addOnScrollListener(new OnScrollListener() {
@@ -173,6 +177,7 @@ public class PickerView extends RecyclerView {
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mIndicator.getLayoutParams();
                     params.leftMargin -= dx;
                     mIndicator.setLayoutParams(params);
+                    mIndicatorOffset -= dx;
                 }
             });
         } else {
@@ -183,33 +188,46 @@ public class PickerView extends RecyclerView {
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mIndicator.getLayoutParams();
                     params.topMargin -= dy;
                     mIndicator.setLayoutParams(params);
+                    mIndicatorOffset -= dy;
                 }
             });
         }
     }
 
-    public void scrollToView(View view, int position) {
-        mCurrentPosition = position;
+    public void scrollToView(View view) {
         int dx, dy;
         if (mOrientation == HORIZONTAL) {
-            dx = view.getLeft() - (mParentWidth / 2) + (mItemSize / 2);
+            dx = view.getLeft() - (mParentWidth / 2) + (view.getWidth() / 2);
             dy = 0;
         } else {
             dx = 0;
-            dy = view.getTop() - (mParentHeight / 2) + (mItemSize / 2);
+            dy = view.getTop() - (mParentHeight / 2) + (view.getHeight() / 2);
         }
 
         smoothScrollBy(dx, dy);
     }
 
+    /**
+     * If an indicator view is set, moves it to the alignment of the picker item in the given position.
+     * To find the distance to scroll, the position of destination view on the screen, the location of the view of origin on the
+     * screen {@link PickerView.Adapter#mLastLocation}, the offset created by scrolling by user {@link PickerView#mIndicatorOffset} is
+     * taken into account.
+     *
+     * @param position View position the indicator will be scrolled to
+     */
     public void scrollIndicatorToPosition(int position) {
         if (mIndicator != null) {
-            int positionChange = position - mLastIndicatorPosition;
-            mLastIndicatorPosition = position;
+            Adapter.SimpleHolder toHolder = (Adapter.SimpleHolder) findViewHolderForAdapterPosition(position);
+            View to = toHolder.mRootView;
+            IndicatorAnimationHelper helper = new IndicatorAnimationHelper();
 
             if (mOrientation == HORIZONTAL) {
-                int deltaX = positionChange * (mItemSize + mDividerSize);
-                IndicatorAnimationHelper helper = new IndicatorAnimationHelper();
+                Adapter adapter = ((Adapter) getAdapter());
+                int deltaX = to.getLeft() - adapter.mLastLocation - mIndicatorOffset;
+
+                // If width of the view moved from and moved to differ, add half of the difference
+                deltaX += (to.getWidth() - adapter.mLastSize) / 2;
+
 
                 if (mIndicatorBounceToggle) {
                     helper.animateHorizontallyWithBounce(mIndicator, deltaX);
@@ -217,8 +235,11 @@ public class PickerView extends RecyclerView {
                     helper.animateHorizontally(mIndicator, deltaX);
                 }
             } else {
-                int deltaY = positionChange * (mItemSize + mDividerSize);
-                IndicatorAnimationHelper helper = new IndicatorAnimationHelper();
+                Adapter adapter = ((Adapter) getAdapter());
+                int deltaY = to.getTop() - adapter.mLastLocation - mIndicatorOffset;
+
+                // If height of the view moved from and moved to differ, add half of the difference
+                deltaY += (to.getHeight() - adapter.mLastSize) / 2;
 
                 if (mIndicatorBounceToggle) {
                     helper.animateVerticallyWithBounce(mIndicator, deltaY);
@@ -226,25 +247,23 @@ public class PickerView extends RecyclerView {
                     helper.animateVertically(mIndicator, deltaY);
                 }
             }
+            mIndicatorOffset = 0;
         }
     }
 
     public void initializeIndicatorPosition() {
         if (mIndicator != null) {
             if (mOrientation == HORIZONTAL) {
-                mLastIndicatorPosition = 0;
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mIndicator.getLayoutParams();
                 params.leftMargin = ((mItemSize + mDividerSize) / 2) - (params.width / 2);
                 mIndicator.setLayoutParams(params);
 
             } else {
-                mLastIndicatorPosition = 0;
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mIndicator.getLayoutParams();
                 params.topMargin = ((mItemSize + mDividerSize) / 2) - (params.height / 2);
                 mIndicator.setLayoutParams(params);
 
             }
-            requestLayout();
         }
     }
 
@@ -252,11 +271,15 @@ public class PickerView extends RecyclerView {
 
         private PickerView mPickerView;
         private boolean isSizeSet = false;
+        private int mLastLocation = 0;
+        private int mLastSize;
+
+        private int mSelectedView = 0;
 
         @Override
         public SimpleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = onCreateView(parent);
-            View rootView = view.getRootView();
+            final View rootView = view.getRootView();
             ViewGroup.LayoutParams layoutParams = rootView.getLayoutParams();
 
             if (mPickerView.mItemsPerScreen > 0) {
@@ -265,6 +288,25 @@ public class PickerView extends RecyclerView {
                 } else {
                     layoutParams.height = mPickerView.mItemSize;
                 }
+
+                mLastSize = mPickerView.mItemSize;
+
+            } else if (!isSizeSet) {
+                rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if (mPickerView.mOrientation == HORIZONTAL) {
+                            mPickerView.mItemSize = rootView.getWidth();
+                            mLastSize = rootView.getWidth();
+                        } else {
+                            mPickerView.mItemSize = rootView.getHeight();
+                            mLastSize = rootView.getHeight();
+                        }
+                        mPickerView.initializeIndicatorPosition();
+                        rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                });
+                isSizeSet = true;
             }
 
             rootView.setLayoutParams(layoutParams);
@@ -276,28 +318,39 @@ public class PickerView extends RecyclerView {
             View view = holder.mRootView;
             view.setId(position);
             onBindView(view, position);
-            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
 
-            if (mPickerView.mItemsPerScreen < 0 && !isSizeSet) {
-                if (mPickerView.mOrientation == HORIZONTAL) {
-                    mPickerView.mItemSize = layoutParams.width;
-                } else {
-                    mPickerView.mItemSize = layoutParams.height;
-                }
-                mPickerView.initializeIndicatorPosition();
-                isSizeSet = true;
+            if (mSelectedView == position) {
+                onSelectView(view, position);
             }
+
+            Log.d("picker", "bind: " + position);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mPickerView.mScrollOnClick) {
-                        mPickerView.scrollToView(v, position);
-                        mPickerView.scrollIndicatorToPosition(position);
+                        mPickerView.scrollToView(v);
                     }
-                    onViewClicked(v, position);
+
+                    mPickerView.scrollIndicatorToPosition(position);
+                    mPickerView.mCurrentPosition = position;
+
+                    setLastItem(v);
+                    onSelectPosition(position);
+                    mSelectedView = position;
+                    notifyItemChanged(position);
                 }
             });
+        }
+
+        public void setLastItem(View view) {
+            if (mPickerView.mOrientation == HORIZONTAL) {
+                mLastLocation = view.getLeft();
+                mLastSize = view.getWidth();
+            } else {
+                mLastLocation = view.getTop();
+                mLastSize = view.getHeight();
+            }
         }
 
         public void setPickerView(PickerView pickerView) {

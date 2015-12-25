@@ -10,5 +10,6 @@ import android.view.ViewGroup;
 interface PickerAdapter {
     View onCreateView(ViewGroup parent);
     void onBindView(View view, int position);
-    void onViewClicked(View view, int position);
+    void onSelectView(View view, int position);
+    void onSelectPosition(int position);
 }

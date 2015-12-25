@@ -25,6 +25,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case R.id.button_simple:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame, SimpleFragment.newInstance(this)).commit();
                 break;
+            case R.id.button_variable:
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame, VariableSizeFragment.newInstance(this)).commit();
+                break;
         }
     }
 }

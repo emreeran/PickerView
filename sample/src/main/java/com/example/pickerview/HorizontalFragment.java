@@ -58,7 +58,7 @@ public class HorizontalFragment extends Fragment {
                 pickerView.scrollToPosition(position, new PickerView.OnScrolledToViewListener() {
                     @Override
                     public void onScrolled(View view) {
-                        if (mPreviousClicked!= null) {
+                        if (mPreviousClicked != null) {
                             mPreviousClicked.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
                         }
                         view.setBackgroundColor(getResources().getColor(android.R.color.black));
@@ -86,6 +86,7 @@ public class HorizontalFragment extends Fragment {
             TextView textView = (TextView) view.findViewById(R.id.picker_item_text_view);
             String text = "Item " + (position + 1);
             textView.setText(text);
+            view.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
         }
 
         @Override
@@ -94,13 +95,17 @@ public class HorizontalFragment extends Fragment {
         }
 
         @Override
-        public void onViewClicked(View view, int position) {
-            mViewPager.setCurrentItem(position, true);
-            if (mPreviousClicked!= null) {
+        public void onSelectView(View view, int position) {
+            if (mPreviousClicked != null) {
                 mPreviousClicked.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
             }
             view.setBackgroundColor(getResources().getColor(android.R.color.black));
             mPreviousClicked = view;
+        }
+
+        @Override
+        public void onSelectPosition(int position) {
+            mViewPager.setCurrentItem(position, true);
         }
     }
 }

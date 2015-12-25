@@ -27,7 +27,7 @@ dependencies {
 
 ext {
     bintrayRepo = 'maven'
-    bintrayName = 'Pickerview'
+    bintrayName = 'PickerView'
 
     publishedGroupId = 'com.emreeran.pickerview'
     libraryName = 'PickerView'
@@ -38,7 +38,7 @@ ext {
     siteUrl = 'https://github.com/emreeran/PickerView'
     gitUrl = 'https://github.com/emreeran/PickerView.git'
 
-    libraryVersion = '1.0.1'
+    libraryVersion = '1.0.0'
 
     developerId = 'emreeran'
     developerName = 'Emre Eran'
