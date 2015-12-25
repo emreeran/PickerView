@@ -18,7 +18,7 @@ If using Gradle add jcenter to repositories
 Add to your module dependencies
         
         dependencies {
-            compile 'com.emreeran.pickerview:pickerview:1.0.1'
+            compile 'com.emreeran.pickerview:pickerview:1.0.0'
         }
         
 ###Adding the **PickerView**
@@ -58,7 +58,9 @@ Extend ```PickerView.Adapter``` to create your adapter class.
 
 Set your item layouts in ```onCreateView``` and manipulate them in ```onBindView``` functions.
 
-Use ```onViewClicked``` function to implement on click events.
+Implement ```onViewSelected``` function to manipulate menu item views on selection.
+
+Implement ```onPositionSelected``` function to add functionality to selected positions.
 
 Set the adapter to the view.
 
