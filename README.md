@@ -56,11 +56,11 @@ Then assign by ```pickerView.setIndicator(indicator);``` or if you want a bounce
 
 Extend ```PickerView.Adapter``` to create your adapter class. 
 
-Set your item layouts in ```onCreateView``` and manipulate them in ```onBindView``` functions.
+Set your item layouts in ```onCreateView``` and manipulate them in ```onBindView``` methods.
 
-Implement ```onViewSelected``` function to manipulate menu item views on selection.
+Implement ```onViewSelected``` method to manipulate menu item views on selection.
 
-Implement ```onPositionSelected``` function to add functionality to selected positions.
+Implement ```onPositionSelected``` method to add functionality to selected positions.
 
 Set the adapter to the view.
 
@@ -70,7 +70,26 @@ Set the adapter to the view.
 
 ###Extras
 
-Call ```pickerView.scrollToItemPosition``` to go to an item, the function can also get a ```PickerView.OnScrolledToViewListener``` 
+Call ```pickerView.scrollToItemPosition``` to go to an item, it can also get a ```PickerView.OnScrolledToViewListener``` 
 parameter to manipulate the target view on scroll.
 
-Sample usages are demonstrated in the sample project
+Usages are demonstrated in the sample project
+
+
+###License
+
+
+        Copyright 2015 Emre Eran
+        
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
+        
+            http://www.apache.org/licenses/LICENSE-2.0
+        
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+
