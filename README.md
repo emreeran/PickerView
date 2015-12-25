@@ -75,6 +75,8 @@ parameter to manipulate the target view on scroll.
 
 Usages are demonstrated in the sample project
 
+###Credits
+Author Emre Eran (emre.eran@gmail.com - https://twitter.com/emreeran)
 
 ###License
 
