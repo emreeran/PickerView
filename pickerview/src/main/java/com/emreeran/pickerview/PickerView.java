@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -140,23 +139,54 @@ public class PickerView extends RecyclerView {
         return super.findViewHolderForLayoutPosition(position);
     }
 
-    public void scrollToPosition(int position) {
-        scrollToPosition(position, null);
+    public void setScrollOnClick(boolean scrollOnClick) {
+        mScrollOnClick = scrollOnClick;
     }
 
-    public void scrollToPosition(int position, @Nullable OnScrolledToViewListener listener) {
+    public void scrollToItemPosition(int position) {
+        scrollToItemPosition(position, null);
+    }
+
+    public void scrollToItemPosition(int position, @Nullable OnScrolledToViewListener listener) {
         if (mCurrentPosition != position) {
-            Adapter.SimpleHolder holder = (Adapter.SimpleHolder) findViewHolderForAdapterPosition(position);
-            // TODO problem here
+            Adapter.SimpleHolder holder;
+            holder = (Adapter.SimpleHolder) findViewHolderForAdapterPosition(position);
+
             if (holder != null) {
-                scrollToView(holder.mRootView);
+                smoothScrollToView(holder.mRootView);
                 scrollIndicatorToPosition(position);
-                mCurrentPosition = position;
-                if (listener != null) {
-                    listener.onScrolled(holder.mRootView);
-                }
-                ((Adapter)getAdapter()).setLastItem(holder.mRootView);
+
+            } else {
+                continuousScrollToPosition(position);
+                holder = (Adapter.SimpleHolder) findViewHolderForAdapterPosition(position);
             }
+
+            mCurrentPosition = position;
+            ((Adapter) getAdapter()).setLastItem(holder.mRootView);
+            ((Adapter) getAdapter()).mSelectedView = position;
+
+            if (listener != null) {
+                listener.onScrolled(holder.mRootView);
+            }
+        }
+    }
+
+    private void continuousScrollToPosition(int position) {
+        int leftMostVisible = getChildAt(0).getId();
+        int rightMostVisible = getChildAt(getChildCount() - 1).getId();
+
+        if (position < leftMostVisible) {
+            Adapter.SimpleHolder holder = (Adapter.SimpleHolder) findViewHolderForAdapterPosition(leftMostVisible);
+            scrollToView(holder.mRootView);
+            continuousScrollToPosition(position);
+        } else if (position > rightMostVisible) {
+            Adapter.SimpleHolder holder = (Adapter.SimpleHolder) findViewHolderForAdapterPosition(rightMostVisible);
+            scrollToView(holder.mRootView);
+            continuousScrollToPosition(position);
+        } else {
+            Adapter.SimpleHolder holder = (Adapter.SimpleHolder) findViewHolderForAdapterPosition(position);
+            smoothScrollToView(holder.mRootView);
+            scrollIndicatorToPosition(position);
         }
     }
 
@@ -194,7 +224,7 @@ public class PickerView extends RecyclerView {
         }
     }
 
-    public void scrollToView(View view) {
+    public void smoothScrollToView(View view) {
         int dx, dy;
         if (mOrientation == HORIZONTAL) {
             dx = view.getLeft() - (mParentWidth / 2) + (view.getWidth() / 2);
@@ -205,6 +235,18 @@ public class PickerView extends RecyclerView {
         }
 
         smoothScrollBy(dx, dy);
+    }
+
+    private void scrollToView(View view) {
+        int dx, dy;
+        if (mOrientation == HORIZONTAL) {
+            dx = view.getLeft() - (mParentWidth / 2) + (view.getWidth() / 2);
+            dy = 0;
+        } else {
+            dx = 0;
+            dy = view.getTop() - (mParentHeight / 2) + (view.getHeight() / 2);
+        }
+        scrollBy(dx, dy);
     }
 
     /**
@@ -323,13 +365,11 @@ public class PickerView extends RecyclerView {
                 onSelectView(view, position);
             }
 
-            Log.d("picker", "bind: " + position);
-
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mPickerView.mScrollOnClick) {
-                        mPickerView.scrollToView(v);
+                        mPickerView.smoothScrollToView(v);
                     }
 
                     mPickerView.scrollIndicatorToPosition(position);

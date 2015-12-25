@@ -70,7 +70,7 @@ Set the adapter to the view.
 
 ###Extras
 
-Call ```pickerView.scrollToPosition``` to go to an item, the function can also get a ```PickerView.OnScrolledToViewListener``` parameter 
-to manipulate the target view on scroll.
+Call ```pickerView.scrollToItemPosition``` to go to an item, the function can also get a ```PickerView.OnScrolledToViewListener``` 
+parameter to manipulate the target view on scroll.
 
 Sample usages are demonstrated in the sample project

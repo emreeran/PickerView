@@ -53,7 +53,7 @@ public class SimpleFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                pickerView.scrollToPosition(position);
+                pickerView.scrollToItemPosition(position);
             }
 
             @Override

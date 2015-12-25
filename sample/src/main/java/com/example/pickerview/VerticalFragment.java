@@ -52,7 +52,7 @@ public class VerticalFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                pickerView.scrollToPosition(position);
+                pickerView.scrollToItemPosition(position);
             }
 
             @Override

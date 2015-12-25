@@ -55,7 +55,7 @@ public class HorizontalFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                pickerView.scrollToPosition(position, new PickerView.OnScrolledToViewListener() {
+                pickerView.scrollToItemPosition(position, new PickerView.OnScrolledToViewListener() {
                     @Override
                     public void onScrolled(View view) {
                         if (mPreviousClicked != null) {
