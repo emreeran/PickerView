@@ -38,7 +38,7 @@ public class HorizontalFragment extends Fragment {
 
         final PickerView pickerView = (PickerView) view.findViewById(R.id.horizontal_picker);
         PickerAdapter pickerAdapter = new PickerAdapter();
-        pickerView.setAdapter(pickerAdapter);
+        pickerView.setAdapter(pickerAdapter, 1);
 
         View indicator = view.findViewById(R.id.indicator);
         pickerView.setIndicator(indicator, true);
@@ -95,7 +95,7 @@ public class HorizontalFragment extends Fragment {
         }
 
         @Override
-        public void onSelectView(View view, int position) {
+        public void onSelectView(View view) {
             if (mPreviousClicked != null) {
                 mPreviousClicked.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
             }

@@ -11,6 +11,8 @@ import android.view.View;
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
+    private static final String TAG = DividerItemDecoration.class.getSimpleName();
+
     private Drawable mDivider;
 
     private int mOrientation;
@@ -82,7 +84,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
             int right;
             if (isFromResource) {
-                right = left + mDivider.getIntrinsicHeight();
+                right = left + mDivider.getIntrinsicWidth();
             } else {
                 right = left + mWidth;
             }

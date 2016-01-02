@@ -33,6 +33,7 @@ public class PickerView extends RecyclerView {
 
     private int mItemSize;
     private int mDividerSize;
+    private int mDividerDrawable;
 
     private View mIndicator;
     private int mCurrentPosition = 0;
@@ -57,6 +58,7 @@ public class PickerView extends RecyclerView {
             mOrientation = attributes.getInt(R.styleable.PickerView_orientation, -1);
             mDividerSize = attributes.getDimensionPixelSize(R.styleable.PickerView_divider_size, 0);
             mItemsPerScreen = attributes.getInteger(R.styleable.PickerView_item_per_screen, -1);
+            mDividerDrawable = attributes.getResourceId(R.styleable.PickerView_divider_drawable, -1);
             final int dividerColor = attributes.getColor(R.styleable.PickerView_divider_color, Color.BLACK);
             LinearLayoutManager layoutManager;
 
@@ -67,9 +69,12 @@ public class PickerView extends RecyclerView {
                     getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                         @Override
                         public void onGlobalLayout() {
-                            if (mDividerSize > 0) {
+                            if (mDividerDrawable != -1) {
+                                addItemDecoration(new DividerItemDecoration(getContext(), mOrientation, mDividerDrawable));
+                            } else if (mDividerSize > 0) {
                                 int height = getMeasuredHeight();
                                 addItemDecoration(new DividerItemDecoration(dividerColor, mDividerSize, height, mOrientation));
+
                             }
                             getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         }
@@ -127,6 +132,13 @@ public class PickerView extends RecyclerView {
             ePickerAdapter.setPickerView(this);
             super.setAdapter(adapter);
         }
+    }
+
+    public void setAdapter(RecyclerView.Adapter adapter, int startPosition) {
+        setAdapter(adapter);
+        ((Adapter) adapter).mSelectedView = startPosition;
+        mCurrentPosition = startPosition;
+
     }
 
     @Override
@@ -224,7 +236,7 @@ public class PickerView extends RecyclerView {
         }
     }
 
-    public void smoothScrollToView(View view) {
+    private void smoothScrollToView(View view) {
         int dx, dy;
         if (mOrientation == HORIZONTAL) {
             dx = view.getLeft() - (mParentWidth / 2) + (view.getWidth() / 2);
@@ -257,7 +269,7 @@ public class PickerView extends RecyclerView {
      *
      * @param position View position the indicator will be scrolled to
      */
-    public void scrollIndicatorToPosition(int position) {
+    private void scrollIndicatorToPosition(int position) {
         if (mIndicator != null) {
             Adapter.SimpleHolder toHolder = (Adapter.SimpleHolder) findViewHolderForAdapterPosition(position);
             View to = toHolder.mRootView;
@@ -293,18 +305,16 @@ public class PickerView extends RecyclerView {
         }
     }
 
-    public void initializeIndicatorPosition() {
+    private void initializeIndicatorPosition() {
         if (mIndicator != null) {
             if (mOrientation == HORIZONTAL) {
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mIndicator.getLayoutParams();
-                params.leftMargin = ((mItemSize + mDividerSize) / 2) - (params.width / 2);
+                params.leftMargin = ((mItemSize + mDividerSize) / 2) - (params.width / 2) + ((mItemSize + mDividerSize) * mCurrentPosition);
                 mIndicator.setLayoutParams(params);
-
             } else {
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mIndicator.getLayoutParams();
-                params.topMargin = ((mItemSize + mDividerSize) / 2) - (params.height / 2);
+                params.topMargin = ((mItemSize + mDividerSize) / 2) - (params.height / 2) + ((mItemSize + mDividerSize) * mCurrentPosition);
                 mIndicator.setLayoutParams(params);
-
             }
         }
     }
@@ -312,11 +322,18 @@ public class PickerView extends RecyclerView {
     public static abstract class Adapter extends RecyclerView.Adapter<Adapter.SimpleHolder> implements PickerAdapter {
 
         private PickerView mPickerView;
-        private boolean isSizeSet = false;
-        private int mLastLocation = 0;
+        private boolean isSizeSet;
+        private boolean isStartLocationSet = false;
+        private int mLastLocation;
         private int mLastSize;
 
-        private int mSelectedView = 0;
+        private int mSelectedView;
+
+        public Adapter() {
+            mSelectedView = 0;
+            mLastLocation = 0;
+            isSizeSet = false;
+        }
 
         @Override
         public SimpleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -357,12 +374,26 @@ public class PickerView extends RecyclerView {
 
         @Override
         public void onBindViewHolder(SimpleHolder holder, final int position) {
-            View view = holder.mRootView;
+            final View view = holder.mRootView;
             view.setId(position);
             onBindView(view, position);
 
+            if (!isStartLocationSet) {
+                if (position == mSelectedView) {
+                    view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            setLastItem(view);
+                            view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }
+                    });
+
+                    isStartLocationSet = true;
+                }
+            }
+
             if (mSelectedView == position) {
-                onSelectView(view, position);
+                onSelectView(view);
             }
 
             view.setOnClickListener(new View.OnClickListener() {
@@ -383,7 +414,7 @@ public class PickerView extends RecyclerView {
             });
         }
 
-        public void setLastItem(View view) {
+        private void setLastItem(View view) {
             if (mPickerView.mOrientation == HORIZONTAL) {
                 mLastLocation = view.getLeft();
                 mLastSize = view.getWidth();
@@ -393,7 +424,7 @@ public class PickerView extends RecyclerView {
             }
         }
 
-        public void setPickerView(PickerView pickerView) {
+        private void setPickerView(PickerView pickerView) {
             mPickerView = pickerView;
         }
 

@@ -82,7 +82,7 @@ public class SimpleFragment extends Fragment {
         }
 
         @Override
-        public void onSelectView(View view, int position) {
+        public void onSelectView(View view) {
 
         }
 
