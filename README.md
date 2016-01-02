@@ -42,6 +42,10 @@ Resizes items so that the specified number of them fit the total view length or 
         app:divider_color="#55000000"
         app:divider_size="2dp"
         
+or use
+
+        app:divider_drawable="@drawable/divider_vertical"
+        
 Adds dividers between items with given color and width or height depending on the orientation
 
 * Adding an indicator view
@@ -67,6 +71,8 @@ Set the adapter to the view.
         PickerView pickerView = (PickerView) view.findViewById(R.id.horizontal_picker);
         PickerAdapter pickerAdapter = new PickerAdapter();
         pickerView.setAdapter(pickerAdapter);
+
+Starting position can also be set by setAdapter method.
 
 ###Extras
 
