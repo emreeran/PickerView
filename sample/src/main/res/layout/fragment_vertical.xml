@@ -9,8 +9,7 @@
         android:id="@+id/vertical_picker"
         android:layout_width="50dp"
         android:layout_height="match_parent"
-        app:divider_color="#55000000"
-        app:divider_size="2dp"
+        app:divider_drawable="@drawable/divider_vertical"
         app:item_per_screen="3"
         app:orientation="vertical"/>
 

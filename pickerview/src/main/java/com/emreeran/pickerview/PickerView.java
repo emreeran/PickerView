@@ -86,7 +86,9 @@ public class PickerView extends RecyclerView {
                     getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                         @Override
                         public void onGlobalLayout() {
-                            if (mDividerSize > 0) {
+                            if (mDividerDrawable != -1) {
+                                addItemDecoration(new DividerItemDecoration(getContext(), mOrientation, mDividerDrawable));
+                            } else if (mDividerSize > 0) {
                                 int width = getMeasuredWidth();
                                 addItemDecoration(new DividerItemDecoration(dividerColor, width, mDividerSize, mOrientation));
                             }

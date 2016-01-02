@@ -9,7 +9,7 @@
         android:id="@+id/horizontal_picker"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:divider_drawable="@drawable/divider"
+        app:divider_drawable="@drawable/divider_horizontal"
         app:item_per_screen="5"
         app:orientation="horizontal"/>
 

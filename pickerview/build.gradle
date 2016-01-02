@@ -38,7 +38,7 @@ ext {
     siteUrl = 'https://github.com/emreeran/PickerView'
     gitUrl = 'https://github.com/emreeran/PickerView.git'
 
-    libraryVersion = '1.0.0'
+    libraryVersion = '1.0.1'
 
     developerId = 'emreeran'
     developerName = 'Emre Eran'
