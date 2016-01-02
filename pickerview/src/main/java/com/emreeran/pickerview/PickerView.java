@@ -19,7 +19,7 @@ import android.widget.RelativeLayout;
  * An indicator view can be assigned to move along with selected items
  * Needs an adapter to be assigned to get view items. Extend your adapter with PickerView.Adapter class.
  * Implement onCreateView to inflate items, onBindView to manipulate views and on onSelectPosition to manage onClick events.
- * <p/>
+ * <p>
  * Created by Emre Eran on 21/12/15.
  */
 public class PickerView extends RecyclerView {
