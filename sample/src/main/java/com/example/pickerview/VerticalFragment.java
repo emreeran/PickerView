@@ -62,7 +62,7 @@ public class VerticalFragment extends Fragment {
         });
     }
 
-    class PickerAdapter extends PickerView.Adapter {
+    private class PickerAdapter extends PickerView.Adapter {
         @Override
         public View onCreateView(ViewGroup parent) {
             return LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_vertical_picker_item, parent, false);

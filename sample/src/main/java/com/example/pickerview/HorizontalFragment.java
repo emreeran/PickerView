@@ -74,7 +74,7 @@ public class HorizontalFragment extends Fragment {
         });
     }
 
-    class PickerAdapter extends PickerView.Adapter {
+    private class PickerAdapter extends PickerView.Adapter {
 
         @Override
         public View onCreateView(ViewGroup parent) {
