@@ -8,7 +8,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0.1"
+        versionName "1.0.2"
     }
     buildTypes {
         release {
@@ -19,11 +19,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
 }
+
+Properties localProperties = new Properties()
+localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 ext {
     bintrayRepo = 'maven'
@@ -38,11 +40,11 @@ ext {
     siteUrl = 'https://github.com/emreeran/PickerView'
     gitUrl = 'https://github.com/emreeran/PickerView.git'
 
-    libraryVersion = '1.0.1'
+    libraryVersion = '1.0.2'
 
-    developerId = 'emreeran'
-    developerName = 'Emre Eran'
-    developerEmail = 'emre.eran@gmail.com'
+    developerId = localProperties.getProperty("bintray.developerId")
+    developerName = localProperties.getProperty("bintray.developerName")
+    developerEmail = localProperties.getProperty("bintray.developerEmail")
 
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
