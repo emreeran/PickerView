@@ -7,7 +7,7 @@ PickerView
 Usage
 -----
 
-###Including to your project
+**Including to your project**
 
 If using Gradle add jcenter or mavenCentral to repositories
 
@@ -21,7 +21,7 @@ Add to your module dependencies
             compile 'com.emreeran.pickerview:pickerview:1.0.1'
         }
         
-###Adding the **PickerView**
+**Adding the PickerView**
 
 Just use the view in your layout and set an orientation
 Add the following line to the following layout ``` xmlns:app="http://schemas.android.com/apk/res-auto" ``` then use the view
@@ -32,7 +32,7 @@ like the following:
                 android:layout_height="50dp"
                 app:orientation="horizontal"/>
                 
-####Additional attributes
+**Additional attributes**
 * Fit a number of items per screen ```app:item_per_screen="ITEM_COUNT"```
 
 Resizes items so that the specified number of them fit the total view length or height depending on the orientation
@@ -56,7 +56,7 @@ on determining the relationship between the indicator view and **PickerView**.
 
 Then assign by ```pickerView.setIndicator(indicator);``` or if you want a bounce animation use ```pickerView.setIndicator(indicator, true);```
 
-###Setting the adapter
+**Setting the adapter**
 
 Extend ```PickerView.Adapter``` to create your adapter class. 
 
@@ -74,18 +74,19 @@ Set the adapter to the view.
 
 Starting position can also be set by setAdapter method.
 
-###Extras
+**Extras**
 
 Call ```pickerView.scrollToItemPosition``` to go to an item, it can also get a ```PickerView.OnScrolledToViewListener``` 
 parameter to manipulate the target view on scroll.
 
 Usages are demonstrated in the sample project
 
-###Credits
+**Credits**
+
 Author Emre Eran (emre.eran@gmail.com - https://twitter.com/emreeran)
 
-###License
-
+License
+-------
 
         Copyright 2015 Emre Eran
         
