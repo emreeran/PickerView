@@ -18,7 +18,7 @@ If using Gradle add jcenter or mavenCentral to repositories
 Add to your module dependencies
         
         dependencies {
-            compile 'com.emreeran.pickerview:pickerview:1.0.1'
+            compile 'com.emreeran.pickerview:pickerview:1.0.2'
         }
         
 **Adding the PickerView**
