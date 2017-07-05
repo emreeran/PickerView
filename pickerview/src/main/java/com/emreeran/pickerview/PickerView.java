@@ -24,6 +24,9 @@ import android.widget.RelativeLayout;
  */
 public class PickerView extends RecyclerView {
 
+    @SuppressWarnings("unused") // Class tag name, used for logging
+    private static final String TAG = PickerView.class.getSimpleName();
+
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
 
@@ -40,6 +43,8 @@ public class PickerView extends RecyclerView {
     private int mIndicatorOffset;
     private boolean mIndicatorBounceToggle;
     private boolean mScrollOnClick = true;
+    private boolean mIsSizeSet = false;
+    private RecyclerView.Adapter mAdapter;
 
     public PickerView(Context context) {
         this(context, null);
@@ -125,11 +130,17 @@ public class PickerView extends RecyclerView {
 
             initializeIndicatorPosition();
         }
+        mIsSizeSet = true;
+
+        if (mAdapter != null) {
+            setAdapter(mAdapter);
+        }
     }
 
     @Override
     public void setAdapter(RecyclerView.Adapter adapter) {
-        if (adapter instanceof Adapter) {
+        mAdapter = adapter;
+        if (mIsSizeSet) {
             Adapter ePickerAdapter = (Adapter) adapter;
             ePickerAdapter.setPickerView(this);
             super.setAdapter(adapter);
@@ -140,7 +151,6 @@ public class PickerView extends RecyclerView {
         setAdapter(adapter);
         ((Adapter) adapter).mSelectedView = startPosition;
         mCurrentPosition = startPosition;
-
     }
 
     @Override
@@ -375,7 +385,7 @@ public class PickerView extends RecyclerView {
         }
 
         @Override
-        public void onBindViewHolder(SimpleHolder holder, final int position) {
+        public void onBindViewHolder(SimpleHolder holder, int position) {
             final View view = holder.mRootView;
             view.setId(position);
             onBindView(view, position);
@@ -398,6 +408,7 @@ public class PickerView extends RecyclerView {
                 onSelectView(view);
             }
 
+            final int viewPosition = position;
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -405,13 +416,13 @@ public class PickerView extends RecyclerView {
                         mPickerView.smoothScrollToView(v);
                     }
 
-                    mPickerView.scrollIndicatorToPosition(position);
-                    mPickerView.mCurrentPosition = position;
+                    mPickerView.scrollIndicatorToPosition(viewPosition);
+                    mPickerView.mCurrentPosition = viewPosition;
 
                     setLastItem(v);
-                    onSelectPosition(position);
-                    mSelectedView = position;
-                    notifyItemChanged(position);
+                    onSelectPosition(viewPosition);
+                    mSelectedView = viewPosition;
+                    notifyItemChanged(viewPosition);
                 }
             });
         }
@@ -430,10 +441,10 @@ public class PickerView extends RecyclerView {
             mPickerView = pickerView;
         }
 
-        public class SimpleHolder extends RecyclerView.ViewHolder {
+        class SimpleHolder extends RecyclerView.ViewHolder {
             View mRootView;
 
-            public SimpleHolder(View itemView) {
+            SimpleHolder(View itemView) {
                 super(itemView);
                 mRootView = itemView;
             }
